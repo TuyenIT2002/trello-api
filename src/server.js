@@ -4,14 +4,13 @@ import exitHook from 'async-exit-hook'
 //import để sử dụng biến môi trường
 import 'dotenv/config'
 import {env} from '~/config/environment'
+import { APIs_v1 } from '~/routes/v1'
 
 const START_SERVER = ()=>{
   const app = express()
-
-  app.get('/', async (req, res) => {
-    res.end('<h1>Hello World!</h1><hr>')
-  })
-
+ 
+  app.use('/v1',APIs_v1)
+  
   app.listen(env.APP_PORT, env.APP_HOST, () => {
     // eslint-disable-next-line no-console
     console.log(`Hello ${env.AUTHOR}, I am running at ${ env.APP_HOST }:${ env.APP_PORT }/`)
