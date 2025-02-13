@@ -1,18 +1,13 @@
 import { StatusCodes } from "http-status-codes";
-
+import ApiError from '~/utils/ApiError'
 
 const createNew = async (req,res,next)=>{
     try {
-        console.log(req.body)
-        // await correctCondition.validateAsync(req.body,{abortEarly:false})
-        // next()
-        res.status(StatusCodes.CREATED).json({message:'post controller thanh cong'})
+        res.status(StatusCodes.CREATED).json({message : 'post controller thanh cong'})
+        throw new ApiError(StatusCodes.BAD_GATEWAY, 'tuyendev message error')         
     } catch (error) {
-        console.log(error);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            errors: error.message
-        })
-    }
+      next(error)
+    }   
 }
 
 export const boardController = {
