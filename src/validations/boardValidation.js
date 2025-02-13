@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import {StatusCodes} from 'http-status-codes'
+import ApiError from '~/utils/ApiError'
 
 const createNew = async (req,res,next)=>{
     const correctCondition = Joi.object({
@@ -13,15 +14,11 @@ const createNew = async (req,res,next)=>{
         description: Joi.string().required().min(3).max(256).trim().strict(),
     })
     try {
-        console.log(req.body)
         await correctCondition.validateAsync(req.body,{abortEarly:false})
+        // cho phép code chạy tiếp đến boardController và sau next() không được để 1 dòng code nào nữa để không sinh ra lỗi
         next()
-        res.status(StatusCodes.CREATED).json({message:'post validation thanh cong'})
     } catch (error) {
-        console.log(error);
-        res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-            errors:new Error(error).message
-        })
+       next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY,new Error(error).message))
     }
 }
 
