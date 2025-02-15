@@ -17,9 +17,30 @@ const BOARD_COLLECTION_SCHEMA = Joi.object({
     _destroy: Joi.boolean().default(false),
 })
 
+const createNew = async (data)=>{
+    try {
+        const createBoard = await GET_DB().collection(BOARD_COLLECTION_NAME).insertOne(data)
+        return createBoard
+        
+    } catch (error) {
+        throw new Error(error)
+    }
+}
 
+const findOneById = async (id)=>{
+    try {
+        const result = await  GET_DB().collection(BOARD_COLLECTION_NAME).findOne({
+            _id : id,
+        })
+        return result
+    } catch (error) {
+        throw new Error(error)
+    }
+}
 
 export const boardModel = {
     BOARD_COLLECTION_NAME,
-    BOARD_COLLECTION_SCHEMA
+    BOARD_COLLECTION_SCHEMA,
+    createNew,
+    findOneById
 }

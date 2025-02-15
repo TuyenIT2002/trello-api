@@ -1,6 +1,7 @@
 // Bắt buộc những hàm trong Service phải có return để trả về kết quả
 
 import { slugify } from "~/utils/formatters"
+import {boardModel} from '~/models/boardModel'
 
 const createNew = async (reqBody)=>{
     try {
@@ -9,7 +10,12 @@ const createNew = async (reqBody)=>{
             ...reqBody,
             slug: slugify(reqBody.title)
         }
-        return newBoard
+
+        const createdBoard = await boardModel.createNew(newBoard)
+        const getNewBoard= await boardModel.findOneById(createdBoard.insertedId)
+
+
+        return getNewBoard
     } catch (error) {
         throw error        
     }
